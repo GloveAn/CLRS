@@ -10,4 +10,4 @@ This repository serves as my algorithm study timeline. I'm learning algorithms v
 
 ## Reading
 
-CLRS finished chapters: 1, 2, 3.
+CLRS finished chapters: I: 1, 2, 3, 4-, 5-; II: 6.
