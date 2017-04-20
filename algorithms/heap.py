@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+
 class Heap():
     def __init__(self, A):
         self._heap = A
@@ -26,8 +27,11 @@ class Heap():
         #     raise IndexError
         top = self._heap[0]
         self._heap_size -= 1
-        self._heap[0] = self._heap[self._heap_size]
-        self._heapify(0)
+        if self._heap_size:
+            self._heap[0] = self._heap.pop()
+            self._heapify(0)
+        else:
+            self._heap.pop()
 
         return top
 
@@ -44,16 +48,24 @@ class Heap():
 
     # exercises 6.5-8
     def delete(self, i):
+        key = self._heap[i]
+
         self._heap_size -= 1
-        self._heap[i] = self._heap[self._heap_size]
-        self._heapify(i)
+        if self._heap_size > i:
+            self._heap[i] = self._heap.pop()
+            self._heapify(i)
+        else:
+            self._heap.pop()
+
+        return key
 
 
 class MinHeap(Heap):
     # exercises 6.2-2
     def _heapify(self, i):
         l = i << 1
-        r = l | 1
+        l = l + 1
+        r = l + 1
         smallest = i
 
         if l < self._heap_size and self._heap[l] < self._heap[i]:
@@ -69,7 +81,8 @@ class MinHeap(Heap):
     def _heapify_iterative(self, i):
         while i < self._heap_size:
             l = i << 1
-            r = i | 1
+            l = l + 1
+            r = l + 1
             smallest = i
 
             if l < self._heap_size and self._heap[l] < self._heap[i]:
@@ -88,23 +101,22 @@ class MinHeap(Heap):
         if i != self._heap_size:
             assert key > self._heap[i], "new key is larger than current key"
         self._heap[i] = key
-        parent = i >> 1
+        parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] > self._heap[i]:
             self._heap[parent], self._heap[i] = \
                 self._heap[i], self._heap[parent]
             i = parent
-            parent = parent >> 1
+            parent = (i - 1) >> 1
 
 
     def change_key(self, i, key):
         if i != self._heap_size:
             assert key > self._heap[i], "new key is smaller than current key"
-        self._heap[i] = key
-        parent = i >> 1
+        parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] > key:
             self._heap[i] = self._heap[parent]
             i = parent
-            parent = parent >> 1
+            parent = (i - 1) >> 1
         self._heap[i] = key
 
 
@@ -112,7 +124,8 @@ class MinHeap(Heap):
 class MaxHeap(Heap):
     def _heapify(self, i):
         l = i << 1
-        r = l | 1
+        l = l + 1
+        r = l + 1
         largest = i
 
         if l < self._heap_size and self._heap[l] > self._heap[i]:
@@ -129,7 +142,8 @@ class MaxHeap(Heap):
     def _heapify_iterative(self, i):
         while i < self._heap_size:
             l = i << 1
-            r = i | 1
+            l = l + 1
+            r = l + 1
             largest = i
 
             if l < self._heap_size and self._heap[l] > self._heap[i]:
@@ -148,24 +162,23 @@ class MaxHeap(Heap):
         if i != self._heap_size:
             assert key < self._heap[i], "new key is smaller than current key"
         self._heap[i] = key
-        parent = i >> 1
+        parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] < self._heap[i]:
             self._heap[parent], self._heap[i] = \
                 self._heap[i], self._heap[parent]
             i = parent
-            parent = parent >> 1
+            parent = (i - 1) >> 1
 
 
     # exercises 6.5-6
     def change_key(self, i, key):
         if i != self._heap_size:
             assert key < self._heap[i], "new key is smaller than current key"
-        self._heap[i] = key
-        parent = i >> 1
+        parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] < key:
             self._heap[i] = self._heap[parent]
             i = parent
-            parent = parent >> 1
+            parent = (i - 1) >> 1
         self._heap[i] = key
 
 
@@ -216,12 +229,12 @@ if __name__ == "__main__":
     A = [15, 13, 9, 5, 12, 8, 7, 4, 0, 6, 2, 1]
     heap = MaxHeap(A)
     heap.delete(3)
-    for _ in range(len(A) - 1):
+    for _ in range(len(A)):
         print(heap.extract_top(), end=" ")
     print()
     A = [15, 13, 9, 5, 12, 8, 7, 4, 0, 6, 2, 1]
     heap = MinHeap(A)
     heap.delete(3)
-    for _ in range(len(A) - 1):
+    for _ in range(len(A)):
         print(heap.extract_top(), end=" ")
     print()
