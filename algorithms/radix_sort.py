@@ -1,35 +1,64 @@
 #!/usr/bin/python
+import sys
+sys.path.append("../assumptions")
 from counting_sort import counting_sort
+from pair import Pair
 
 
-# chapter 8.3, exercises 8.3-1
+class RadixPair(Pair):
+    order = 0
+    def __init__(self, key, value=None):
+        Pair.__init__(self, key, value)
+
+        self._digits = self._split_key()
+
+
+    def __len__(self):
+        return len(self._digits)
+
+
+    def __int__(self):
+        if RadixPair.order < len(self._digits):
+            return self._digits[RadixPair.order]
+        else:
+            return 0
+
+
+    def key(self, k=None):
+        if k:
+            self._key = k
+        else:
+            return int(self)
+
+
+    def _split_key():
+        # self._digits = []
+        raise NotImplementedError
+
+
+# chapter 8.3
 def radix_sort(A):
-    def counting_sort(A, d):  # char in string only
-        B = [0] * len(A)
-        C = [0] * 26
+    d = 0
+    for a in A:
+        if d < len(a):
+            d = len(a)
 
-        for i in range(len(A)):
-            C[ord(A[i][d]) - ord('A')] += 1
-        C[25] = len(A) - C[25]
-        for i in reversed(range(25)):
-            C[i] = C[i + 1] - C[i]
-        for i in range(len(A)):
-            B[C[ord(A[i][d]) - ord('A')]] = A[i]
-            C[ord(A[i][d]) - ord('A')] += 1
-
-        for i in range(len(A)):
-            A[i] = B[i]
+    for i in range(d):
+        RadixPair.order = i
+        counting_sort(A)
 
 
-    # Assum same length for strings in the list
-    for i in reversed(range(len(A[0]))):
-        counting_sort(A, i)
-
-
+# exercises 8.3-1
 if __name__ == '__main__':
+    class CharRadixPair(RadixPair):
+        def _split_key(self):
+            return [ord(c) - ord('A') for c in reversed(self._key)]
+
+
     A = [
         "COW", "DOG", "SEA", "RUG", "ROW", "MOB", "BOX", "TAB",
         "BAR", "EAR", "TAR", "DIG", "BIG", "TEA", "NOW", "FOW"]
-    print(A)
+    for i in range(len(A)):
+        A[i] = CharRadixPair(A[i])
     radix_sort(A)
     print(A)

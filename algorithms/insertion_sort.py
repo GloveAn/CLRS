@@ -32,10 +32,8 @@ def insertion_sort_recursion(A):
 
 if __name__ == '__main__':
     A = [5, 2, 4, 6, 1, 3]
-    print(A)
     insertion_sort(A)
     print(A)
     A = [5, 2, 4, 6, 1, 3]
-    print(A)
     insertion_sort_recursion(A)
     print(A)

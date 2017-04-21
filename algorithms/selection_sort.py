@@ -14,6 +14,5 @@ def selection_sort(A):
 
 if __name__ == '__main__':
     A = [5, 2, 4, 6, 1, 3]
-    print(A)
     selection_sort(A)
     print(A)

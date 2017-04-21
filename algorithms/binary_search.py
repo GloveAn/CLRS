@@ -6,16 +6,16 @@
 def binary_search(A, v):
     i = 0
     j = len(A) - 1
-    m = (i + j) // 2
 
     while i <= j:
+        m = (i + j) // 2
+
         if A[m] == v:
             return m
         elif A[m] < v:
             i = m + 1
         else:
             j = m - 1
-        m = (i + j) // 2
 
     return -1
 

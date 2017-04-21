@@ -8,15 +8,15 @@ def bucket_sort(A):
     n = len(A)
     B = [[] for _ in range(n)]
 
-    for i in A:
-        B[floor(i)].append(i)
-    for i in B:
-        insertion_sort(i)
+    for a in A:
+        B[floor(a)].append(a)
+    for b in B:
+        insertion_sort(b)
 
     c = 0
-    for i in B:
-        for j in i:
-            A[c] = j
+    for b in B:
+        for i in b:
+            A[c] = i
             c += 1
 
 
