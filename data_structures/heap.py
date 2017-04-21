@@ -210,13 +210,8 @@ if __name__ == "__main__":
     print()
 
     A = [15, 13, 9, 5, 12, 8, 7, 4, 0, 6, 2, 1]
-    import sys
-    sys.path.append("../assumptions")
-    from pair import Pair
-    for i in range(len(A)):
-        A[i] = Pair(A[i])
     queue = PriorityQueue(A)
-    queue.insert(Pair(10))
+    queue.insert(10)
     for _ in range(len(A)):
         print(queue.extract_top(), end=" ")
     print()

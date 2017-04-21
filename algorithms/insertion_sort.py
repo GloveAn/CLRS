@@ -15,10 +15,10 @@ def insertion_sort(A):
 
 
 # exercises 2.3-4
-def insertion_sort_recursion(A):
-    def insert_recursively(A, j):
+def insertion_sort_recursive(A):
+    def insert_recursive(A, j):
         if j > 1:
-            insert_recursively(A, j - 1)
+            insert_recursive(A, j - 1)
         key = A[j]
         i = j - 1
         while i >= 0 and A[i] > key:
@@ -27,7 +27,7 @@ def insertion_sort_recursion(A):
         A[i + 1] = key
 
 
-    insert_recursively(A, len(A) - 1)
+    insert_recursive(A, len(A) - 1)
 
 
 if __name__ == '__main__':
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     insertion_sort(A)
     print(A)
     A = [5, 2, 4, 6, 1, 3]
-    insertion_sort_recursion(A)
+    insertion_sort_recursive(A)
     print(A)

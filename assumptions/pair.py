@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import math
+from math import floor
 
 
 class Pair():
@@ -46,7 +46,7 @@ class Pair():
 
 
     def __floor__(self):
-        return math.floor(self._key)
+        return floor(self._key)
 
 
     def key(self, k=None):
@@ -61,3 +61,10 @@ class Pair():
             self._value = v
         else:
             return self._value
+
+
+if __name__ == "__main__":
+    a = Pair(1)
+    b = Pair(2)
+
+    print(a, int(b), a < b, a > b, a.key(), b.value(), floor(a) + floor(b))
