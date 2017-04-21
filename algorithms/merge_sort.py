@@ -13,10 +13,8 @@ def merge_sort_sentinels(A):
         L = [0] * (n1 + 1)
         R = [0] * (n2 + 1)
 
-        for i in range(n1):
-            L[i] = A[p + i]
-        for j in range(n2):
-            R[j] = A[q + j]
+        L[ : n1] = A[p : p + n1]
+        R[ : n2] = A[q : q + n2]
         L[n1] = INFINITY
         R[n2] = INFINITY
 
@@ -51,10 +49,8 @@ def merge_sort(A):
         L = [0] * n1
         R = [0] * n2
 
-        for i in range(n1):
-            L[i] = A[p + i]
-        for j in range(n2):
-            R[j] = A[q + j]
+        L[ : n1] = A[p : p + n1]
+        R[ : n2] = A[q : q + n2]
 
         i = 0
         j = 0
@@ -91,10 +87,8 @@ def merge_sort(A):
 
 if __name__ == '__main__':
     A = [5, 2, 4, 6, 1, 3]
-    print(A)
     merge_sort_sentinels(A)
     print(A)
     A = [5, 2, 4, 6, 1, 3]
-    print(A)
     merge_sort(A)
     print(A)

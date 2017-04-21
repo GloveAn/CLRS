@@ -61,6 +61,11 @@ class Heap():
 
 
 class MinHeap(Heap):
+    def __init__(self, A):
+        Heap.__init__(self, A)
+        self.decrease_key = self.change_key
+
+
     # exercises 6.2-2
     def _heapify(self, i):
         l = i << 1
@@ -99,7 +104,7 @@ class MinHeap(Heap):
 
     def change_key_origin(self, i, key):
         if i != self._heap_size:
-            assert key > self._heap[i], "new key is larger than current key"
+            assert key <= self._heap[i], "new key is larger than current key"
         self._heap[i] = key
         parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] > self._heap[i]:
@@ -111,7 +116,7 @@ class MinHeap(Heap):
 
     def change_key(self, i, key):
         if i != self._heap_size:
-            assert key > self._heap[i], "new key is smaller than current key"
+            assert key <= self._heap[i], "new key is smaller than current key"
         parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] > key:
             self._heap[i] = self._heap[parent]
@@ -122,6 +127,11 @@ class MinHeap(Heap):
 
 # chapter 6.2
 class MaxHeap(Heap):
+    def __init__(self, A):
+        Heap.__init__(self, A)
+        self.increase_key = self.change_key
+
+
     def _heapify(self, i):
         l = i << 1
         l = l + 1
@@ -160,7 +170,7 @@ class MaxHeap(Heap):
 
     def change_key_origin(self, i, key):
         if i != self._heap_size:
-            assert key < self._heap[i], "new key is smaller than current key"
+            assert key >= self._heap[i], "new key is smaller than current key"
         self._heap[i] = key
         parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] < self._heap[i]:
@@ -173,7 +183,7 @@ class MaxHeap(Heap):
     # exercises 6.5-6
     def change_key(self, i, key):
         if i != self._heap_size:
-            assert key < self._heap[i], "new key is smaller than current key"
+            assert key >= self._heap[i], "new key is smaller than current key"
         parent = (i - 1) >> 1
         while i > 0 and self._heap[parent] < key:
             self._heap[i] = self._heap[parent]
@@ -200,8 +210,13 @@ if __name__ == "__main__":
     print()
 
     A = [15, 13, 9, 5, 12, 8, 7, 4, 0, 6, 2, 1]
+    import sys
+    sys.path.append("../assumptions")
+    from pair import Pair
+    for i in range(len(A)):
+        A[i] = Pair(A[i])
     queue = PriorityQueue(A)
-    queue.insert(10)
+    queue.insert(Pair(10))
     for _ in range(len(A)):
         print(queue.extract_top(), end=" ")
     print()
