@@ -11,6 +11,6 @@ CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III().
 
 ## Solutions
 
-1. By [Stefan Kanev](http://clrs.skanev.com/)
-2. By [Zhao HG](https://www.gitbook.com/book/cyberzhg/clrs/details)
+1. By [Zhao HG](https://www.gitbook.com/book/cyberzhg/clrs/details)
+2. By [Stefan Kanev](http://clrs.skanev.com/)
 3. By [CLRS](http://www.math.rutgers.edu/~ajl213/CLRS/CLRS.html)
