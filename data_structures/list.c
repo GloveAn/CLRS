@@ -1,5 +1,5 @@
 /* exercises 10.2-8 */
-// gcc -Wall List.c
+// gcc -Wall list.c
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>  // uintptr_t
@@ -20,16 +20,16 @@ static inline Node *XOR3(Node *a, Node *b, Node *c)
     return (Node *)((uintptr_t)a ^ (uintptr_t)b ^ (uintptr_t)c);
 }
 
-typedef struct
+typedef struct _List
 {
-    /* head points to a sentinel nodes */
+    /* head points to a sentinel node */
     Node *head;
-    /* tail points to a sentinel nodes */
+    /* tail points to a sentinel node */
     Node *tail;
 } List;
 
 List *list_init(void)
-/* init list with a sentinel */
+/* init list with two sentinels */
 {
     Node *head = calloc(1, sizeof(Node));
     Node *tail = calloc(1, sizeof(Node));
@@ -43,6 +43,9 @@ List *list_init(void)
 
         return 0;
     }
+
+    // head->np = tail ^ tail
+    // tail->np = head ^ head
 
     list->head = head;
     list->tail = tail;
