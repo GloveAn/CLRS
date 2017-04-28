@@ -105,15 +105,15 @@ def inorder_tree_nonrecursive(x):
 def preorder_tree_walk(x):
     if x is not None:
         print(x.data)
-        inorder_tree_walk(x.left)
-        inorder_tree_walk(x.right)
+        preorder_tree_walk(x.left)
+        preorder_tree_walk(x.right)
 
 
 # exercises 12.1-4
 def postorder_tree_walk(x):
     if x is not None:
-        inorder_tree_walk(x.left)
-        inorder_tree_walk(x.right)
+        postorder_tree_walk(x.left)
+        postorder_tree_walk(x.right)
         print(x.data)
 
 
