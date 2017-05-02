@@ -23,7 +23,7 @@ class RedBlackTree():
 
 
     # chapter 13.2
-    def left_rotate(self, x):
+    def _left_rotate(self, x):
         y = x.right
         x.right = y.left
         if y.left != self.nil:
@@ -40,7 +40,7 @@ class RedBlackTree():
 
 
     # exercises 13.2-1
-    def right_rotate(self, y):
+    def _right_rotate(self, y):
         x = y.left
         y.left = x.right
         if x.right != self.nil:
@@ -76,11 +76,11 @@ class RedBlackTree():
         z.left = self.nil
         z.right = self.nil
         z.color = RED
-        self.insert_fixup(z)
+        self._insert_fixup(z)
 
 
     # chapter 13.3
-    def insert_fixup(self, z):
+    def _insert_fixup(self, z):
         """ https://www.youtube.com/watch?v=FNeL18KsWPc """
         while z.parent.color == RED:
             if z.parent == z.parent.parent.left:
@@ -95,11 +95,11 @@ class RedBlackTree():
                     if z == z.parent.right:
                         # zig-zag case
                         z = z.parent                    # case 2
-                        self.left_rotate(z)             # case 2
+                        self._left_rotate(z)             # case 2
                     # straight line case
                     z.parent.color = BLACK              # case 3
                     z.parent.parent.color = RED         # case 3
-                    self.right_rotate(z.parent.parent)  # case 3
+                    self._right_rotate(z.parent.parent)  # case 3
             else:
                 y = z.parent.parent.left
                 if y.color == RED:
@@ -110,11 +110,70 @@ class RedBlackTree():
                 else:
                     if z == z.parent.left:
                         z = z.parent
-                        self.right_rotate(z)
+                        self._right_rotate(z)
                     z.parent.color = BLACK
                     z.parent.parent.color = RED
-                    self.left_rotate(z.parent.parent)
+                    self._left_rotate(z.parent.parent)
         self.root.color = BLACK
+
+
+    # chapter 13.4
+    def _transplant(self, u, v):
+        if u.parent == self.nil:
+            self.root = v
+        elif u == u.parent.left:
+            u.parent.left = v
+        else:
+            u.parent.right = v
+        v.parent = u.parent
+
+
+    def _minimum(self, x):
+        if x is self.nil:
+            return x
+        while x.left is not self.nil:
+            x = x.left
+        return x
+
+
+    # chapter 13.4
+    def delete(self, z):
+        y = z
+        y_original_color = y.color
+        if z.left == self.nil:
+            x = z.right
+            self._transplant(z, z.right)
+        elif z.right == self.nil
+            x = z.left
+            self._transplant(z, z.left)
+        else:
+            y = self._minimum(z.right)
+            y_original_color = y.color
+            x = y.right
+            if y.parent = z:
+                x.parent = y
+            else:
+                self._transplant(y, y.right)
+                y.right = z.right
+                y.right.parent = y
+            self._transplant(z, y)
+            y.left = z.left
+            y.left.parent = y
+            y.color = z.color
+        if y_original_color == BLACK:
+            self._delete_fixup(x)
+
+
+    def _delete_fixup(self, x):
+        pass
+
+
+def tree_minimum(x):
+    if x is :
+        return x
+    while x.left is not None:
+        x = x.left
+    return x
 
 
 if __name__ == "__main__":

@@ -34,7 +34,7 @@ class BinarySearchTree():
 
 
     # chapter 12.3
-    def transplant(self, u, v):
+    def _transplant(self, u, v):
         if u.p is None:
             self.root = v
         elif u == u.parent.left:
@@ -48,16 +48,16 @@ class BinarySearchTree():
     # chapter 12.3
     def delete(self, z):
         if z.left is None:
-            self.transplant(z, z.right)
+            self._transplant(z, z.right)
         elif z.right is None:
-            self.transplant(z, z.left)
+            self._transplant(z, z.left)
         else:
             y = tree_minimum(z.right)
             if y.parent != z:
-                self.transplant(y, y.right)
+                self._transplant(y, y.right)
                 y.right = z.right
                 y.right.parent = y
-            self.transplant(z, y)
+            self._transplant(z, y)
             y.left = z.left
             y.left.parent = y
 
