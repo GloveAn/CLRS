@@ -35,7 +35,7 @@ class BinarySearchTree():
 
     # chapter 12.3
     def _transplant(self, u, v):
-        if u.p is None:
+        if u.parent is None:
             self.root = v
         elif u == u.parent.left:
             u.parent.left = v

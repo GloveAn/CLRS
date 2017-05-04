@@ -1,23 +1,23 @@
 #!/usr/bin/python
 # problem 13-3
-# material: https://www.youtube.com/watch?v=FNeL18KsWPc
-# !! under construction
+
 
 class Node():
-    def __init__(self, data, hight=0, parent=None):
+    def __init__(self, data):
         self.data = data
-        self.hight = hight  # length of highest path from it down to a leaf
-        self.parent = parent
+        self.hight = 0  # length of highest path from it down to a leaf
+        self.parent = None
         self.left = None
         self.right = None
 
 
 class AVLTree():
+    # NOTE: AVL Tree can be inherited from Binary Search Tree
     def __init__(self):
         self.root = None
 
 
-    def _left_rotate(x):
+    def _left_rotate(self, x):
         y = x.right
         x.right = y.left
         if y.left != None:
@@ -25,15 +25,18 @@ class AVLTree():
         y.parent = x.parent
         if x.parent == None:
             self.root = y
-        else x.parent.left == x:
+        elif x.parent.left == x:
             x.parent.left = y
         else:
             x.parent.right = y
         y.left = x
         x.parent = y
 
+        self._update_height(x)
+        self._update_height(y)
 
-    def _right_rotate(y):
+
+    def _right_rotate(self, y):
         x = y.left
         y.left = x.right
         if x.right != None:
@@ -44,50 +47,37 @@ class AVLTree():
         elif y.parent.left == y:
             y.parent.left = x
         else:
-            y.parent.right = y
+            y.parent.right = x
         x.right = y
         y.parent = x
 
+        self._update_height(y)
+        self._update_height(x)
 
-    def _balance(x):
+
+    def _height(self, x):
+        return x.height if x else -1
+
+
+    def _update_height(self, x):
+        x.height = max(self._height(x.left), self._height(x.right)) + 1
+
+
+    def _balance(self, x):
         while x is not None:
-            x_left_height = 0
-            x_right_height = 0
-            if x.left is not None:
-                x_left_height = x.left.height
-            if x.right is not None:
-                x_right_height = x.right.height
-
-            if x_left_height - x_right_height > 1:
-                y = x.left
-                y_left_height = 0
-                y_right_height = 0
-                if y.left is not None:
-                    y_left_height = y.left.height
-                if y.right is not None:
-                    y_right_height = y.right.height
-
-                if y_left_height > y_right_height:
+            self._update_height(x)
+            if self._height(x.left) > self._height(x.right) + 1:
+                if self._height(x.left.left) > self._height(x.left.right):
                     self._right_rotate(x)
                 else:
-                    self._left_rotate(y)
+                    self._left_rotate(x.left)
                     self._right_rotate(x)
-            elif x_right_height - x_left_height > 1:
-                y = x.right
-                y_left_height = 0
-                y_right_height = 0
-                if y.left is not None:
-                    y_left_height = y.left.height
-                if y.right is not None:
-                    y_right_height = y.right.height
-
-                if y_left_height < y_right_height:
+            elif self._height(x.left) + 1 < self._height(x.right):
+                if self._height(x.right.right) > self._height(x.right.left):
                     self._left_rotate(x)
                 else:
-                    self._right_rotate(y)
+                    self._right_rotate(x.right)
                     self._left_rotate(x)
-            else:
-                pass
 
             x = x.parent
 
@@ -109,4 +99,97 @@ class AVLTree():
         else:
             y.left = z
 
-        self._balance(y);
+        self._balance(z)
+
+
+    def _transplant(self, u, v):
+        if u.parent is None:
+            self.root = v
+        elif u.parent.left == u:
+            u.parent.left = v
+        else:
+            u.parent.right = v
+        if v is not None:
+            v.parent = u.parent
+
+
+    def _minimum(self, x):
+        if x is None:
+            return x
+        while x.left is not None:
+            x = x.left
+        return x
+
+
+    def delete(self, z):
+        x = z.parent  # record the parent of real deleted node
+        if z.left is None:
+            self._transplant(z, z.right)
+        elif z.right is None:
+            self._transplant(z, z.left)
+        else:
+            y = self._minimum(z.right)
+            if y.parent != z:
+                self._transplant(y, y.right)
+                y.right = z.right
+                y.right.parent = y
+
+                x = y.parent
+            else:
+                x = y  # here is a mit bug fix (2011 fall, lecture 6 code)
+            self._transplant(z, y)
+            y.left = z.left
+            y.left.parent = y
+
+        self._balance(x)
+
+
+    def _validate(self, x):
+        if x is None: return
+
+        self._validate(x.left) if x.left else None
+        self._validate(x.right) if x.right else None
+
+        assert abs(self._height(x.left) - self._height(x.right)) <= 1, "oops"
+        self._update_height(x)
+
+
+if __name__ == '__main__':
+    from random import randint
+
+
+    def preorder_tree_walk(x):
+        if x is not None:
+            print(x.data)
+            preorder_tree_walk(x.left)
+            preorder_tree_walk(x.right)
+        else:
+            print(None)
+
+
+    tree = AVLTree()
+    nodes = [Node(i) for i in range(20)]
+
+    # random shuffle
+    for i in reversed(range(1, len(nodes))):
+        j = randint(0, i)
+        nodes[i], nodes[j] = nodes[j], nodes[i]
+
+    for node in nodes:
+        tree.insert(node)
+        try:
+            tree._validate(tree.root)
+        except AssertionError as ae:
+            preorder_tree_walk(tree.root)
+
+    # random shuffle
+    for i in reversed(range(1, 20)):
+        j = randint(0, i)
+        nodes[i], nodes[j] = nodes[j], nodes[i]
+
+    for node in nodes:
+        tree.delete(node)
+        try:
+            tree._validate(tree.root)
+        except AssertionError as ae:
+            preorder_tree_walk(tree.root)
