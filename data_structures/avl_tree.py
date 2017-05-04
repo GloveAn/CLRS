@@ -67,13 +67,13 @@ class AVLTree():
         while x is not None:
             self._update_height(x)
             if self._height(x.left) > self._height(x.right) + 1:
-                if self._height(x.left.left) > self._height(x.left.right):
+                if self._height(x.left.left) >= self._height(x.left.right):
                     self._right_rotate(x)
                 else:
                     self._left_rotate(x.left)
                     self._right_rotate(x)
             elif self._height(x.left) + 1 < self._height(x.right):
-                if self._height(x.right.right) > self._height(x.right.left):
+                if self._height(x.right.right) >= self._height(x.right.left):
                     self._left_rotate(x)
                 else:
                     self._right_rotate(x.right)
@@ -114,8 +114,6 @@ class AVLTree():
 
 
     def _minimum(self, x):
-        if x is None:
-            return x
         while x.left is not None:
             x = x.left
         return x
@@ -129,14 +127,15 @@ class AVLTree():
             self._transplant(z, z.left)
         else:
             y = self._minimum(z.right)
+
+            x = y
+
             if y.parent != z:
+                x = y.parent
+
                 self._transplant(y, y.right)
                 y.right = z.right
                 y.right.parent = y
-
-                x = y.parent
-            else:
-                x = y  # here is a mit bug fix (2011 fall, lecture 6 code)
             self._transplant(z, y)
             y.left = z.left
             y.left.parent = y
@@ -155,7 +154,10 @@ class AVLTree():
 
 
 if __name__ == '__main__':
+    import sys
     from random import randint
+    sys.path.append("../algorithms")
+    from random_permutation import randomize_in_place
 
 
     def preorder_tree_walk(x):
@@ -170,11 +172,7 @@ if __name__ == '__main__':
     tree = AVLTree()
     nodes = [Node(i) for i in range(20)]
 
-    # random shuffle
-    for i in reversed(range(1, len(nodes))):
-        j = randint(0, i)
-        nodes[i], nodes[j] = nodes[j], nodes[i]
-
+    randomize_in_place(nodes)
     for node in nodes:
         tree.insert(node)
         try:
@@ -182,11 +180,7 @@ if __name__ == '__main__':
         except AssertionError as ae:
             preorder_tree_walk(tree.root)
 
-    # random shuffle
-    for i in reversed(range(1, 20)):
-        j = randint(0, i)
-        nodes[i], nodes[j] = nodes[j], nodes[i]
-
+    randomize_in_place(nodes)
     for node in nodes:
         tree.delete(node)
         try:
