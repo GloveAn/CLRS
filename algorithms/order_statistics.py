@@ -19,6 +19,33 @@ def maximum(A):
     return m
 
 
+# exercises 9.1-1
+def second_smallest(A):
+    def second_smallest_recursive(A, i, j):
+        if i < j - 1:
+            m = (i + j) >> 1
+            left_min, left_over = second_smallest_recursive(A, i, m)
+            right_min, right_over = second_smallest_recursive(A, m, j)
+
+            if left_min < right_min:
+                left_over.append(right_min)
+                return left_min, left_over
+            else:
+                right_over.append(left_min)
+                return right_min, right_over
+        else:
+            return A[i], []
+
+
+    all_min, all_over = second_smallest_recursive(A, 0, len(A))
+    sencond_min = all_over[0]
+    for i in range(1, len(all_over)):
+        if sencond_min > all_over[i]:
+            sencond_min = all_over[i]
+
+    return all_min, sencond_min
+
+
 # exercises 9.1-2
 def min_max(A):
     mi = A[0]
@@ -78,33 +105,6 @@ def randomized_select(A, i, partition=randomozed_partition):
 
 
 if __name__ == "__main__":
-    # exercises 9.1-1
-    def second_smallest(A):
-        def second_smallest_recursive(A, i, j):
-            if i < j - 1:
-                m = (i + j) >> 1
-                left_min, left_over = second_smallest_recursive(A, i, m)
-                right_min, right_over = second_smallest_recursive(A, m, j)
-
-                if left_min < right_min:
-                    left_over.append(right_min)
-                    return left_min, left_over
-                else:
-                    right_over.append(left_min)
-                    return right_min, right_over
-            else:
-                return A[i], []
-
-
-        all_min, all_over = second_smallest_recursive(A, 0, len(A))
-        sencond_min = all_over[0]
-        for i in range(1, len(all_over)):
-            if sencond_min > all_over[i]:
-                sencond_min = all_over[i]
-
-        return all_min, sencond_min
-
-
     A = [3, 2, 9, 0, 7, 5, 4, 8, 6, 1]
     print(minimum(A), maximum(A))
     print(*second_smallest(A))

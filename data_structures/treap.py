@@ -89,12 +89,6 @@ class Treap():
             v.parent = u.parent
 
 
-    def _minimum(self, x):
-        while x.left is not None:
-            x = x.left
-        return x
-
-
     def delete(self, z):
         # rotate 'z' to the leaf and delete it
         while z.left is not None and z.right is not None:
