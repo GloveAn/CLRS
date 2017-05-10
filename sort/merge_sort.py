@@ -86,6 +86,8 @@ def merge_sort(A):
 
 
 if __name__ == '__main__':
+    import sys
+    sys.path.append("../search")
     from binary_search import binary_search
 
 
