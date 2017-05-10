@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import sys
+sys.path.append("../sort")
 from quick_sort import partition, randomozed_partition
 
 

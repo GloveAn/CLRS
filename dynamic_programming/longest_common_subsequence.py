@@ -104,7 +104,46 @@ def lcs_length_modified2(X, Y):
 
 # exercises 15.4-6
 def longest_monotonically_increasing_subsequence(X):
-    pass
+    # http://www.geeksforgeeks.org/longest-monotonically-increasing-subsequence-size-n-log-n/
+    def binary_search(X, a):
+        i = 0
+        j = len(X) - 1
+
+        while i <= j:
+            m = (i + j) // 2
+
+            if X[m] == a:
+                return m
+            elif X[m] < a:
+                i = m + 1
+            else:
+                j = m - 1
+
+        return j
+
+
+    INFINITY = 0x7FFFFFFF
+
+    m = len(X)
+    B = [INFINITY] * m
+    C = [None] * m
+
+    B[0] = X[0]
+    C[0] = [X[0]]
+    L = 0
+
+    for i in range(1, m):
+        if X[i] < B[0]:
+            B[0] = X[i]
+            C[0] = [X[i]]
+        else:
+            j = binary_search(B, X[i])
+            B[j + 1] = X[i]
+            C[j + 1] = C[j] + [X[i]]
+            if j == L:
+                L += 1
+
+    return C[L]
 
 
 if __name__ == "__main__":
@@ -117,3 +156,5 @@ if __name__ == "__main__":
     print()
     print(lcs_length_modified1(X, Y))
     print(lcs_length_modified2(X, Y))
+    X = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
+    print(longest_monotonically_increasing_subsequence(X))
