@@ -1,4 +1,6 @@
 #!/usr/bin/python
+import sys
+sys.path.append("../sort")
 from random import randint
 from merge_sort import merge_sort
 

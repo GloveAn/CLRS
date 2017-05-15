@@ -2,9 +2,10 @@
 
 
 class Node():
-    def __init__(self, data, parent=None):
+    def __init__(self, data):
         self.data = data
-        self.parent = parent
+
+        self.parent = None
         self.left = None
         self.right = None
 
@@ -12,20 +13,21 @@ class Node():
 class BinarySearchTree():
     def __init__(self):
         self.root = None
+        self.nil = None
 
 
     # chapter 12.3
     def insert(self, z):
-        y = None
+        y = self.nil
         x = self.root
-        while x is not None:
+        while x is not self.nil:
             y = x
             if z.data < x.data:
                 x = x.left
             else:
                 x = x.right
         z.parent = y
-        if y is None:
+        if y is self.nil:
             self.root = z
         elif z.data < y.data:
             y.left = z
@@ -35,24 +37,24 @@ class BinarySearchTree():
 
     # chapter 12.3
     def _transplant(self, u, v):
-        if u.parent is None:
+        if u.parent is self.nil:
             self.root = v
         elif u == u.parent.left:
             u.parent.left = v
         else:
             u.parent.right = v
-        if v is not None:
+        if v is not self.nil:
             v.parent = u.parent
 
 
     # chapter 12.3
     def delete(self, z):
-        if z.left is None:
+        if z.left is self.nil:
             self._transplant(z, z.right)
-        elif z.right is None:
+        elif z.right is self.nil:
             self._transplant(z, z.left)
         else:
-            y = tree_minimum(z.right)
+            y = self.minimum(z.right)
             if y.parent != z:
                 self._transplant(y, y.right)
                 y.right = z.right
@@ -60,6 +62,106 @@ class BinarySearchTree():
             self._transplant(z, y)
             y.left = z.left
             y.left.parent = y
+
+
+    # chapter 12.2
+    def search(self, x, k = None):
+        if k is None:
+            k = x
+            x = self.root
+
+        while x is not self.nil and k != x.data:
+            if k < x.data:
+                x = x.left
+            else:
+                x = x.right
+        return x
+
+
+    # chapter 12.2
+    def minimum(self, x = None):
+        if x is None:
+            x = self.root
+
+        if x is self.nil:
+            return x
+        while x.left is not self.nil:
+            x = x.left
+        return x
+
+
+    # chapter 12.2
+    def maximum(self, x = None):
+        if x is None:
+            x = self.root
+
+        if x is self.nil:
+            return x
+        while x.right is not None:
+            x = x.right
+        return x
+
+
+    # chapter 12.2
+    def successor(self, x = None):
+        if x is None:
+            x = self.root
+
+        if x.right is not self.nil:
+            return self.minimum(x.right)
+        y = x.parent
+        while y is not self.nil and x == y.right:
+            x = y
+            y = y.parent
+        return y
+
+
+    # exercises 12.2-3
+    def predecessor(self, x = None):
+        if x is None:
+            x = self.root
+
+        if x.left is not self.nil:
+            return tree_maximum(x.left)
+        y = x.parent
+        while y is not self.nil and x == y.left:
+            x = y
+            y = y.parent
+        return y
+
+
+    # chapter 13.2
+    def _left_rotate(self, x):
+        y = x.right
+        x.right = y.left
+        if y.left != self.nil:
+            y.left.parent = x
+        y.parent = x.parent
+        if x.parent == self.nil:
+            self.root = y
+        elif x == x.parent.left:
+            x.parent.left = y
+        else:
+            x.parent.right = y
+        y.left = x
+        x.parent = y
+
+
+    # exercises 13.2-1
+    def _right_rotate(self, y):
+        x = y.left
+        y.left = x.right
+        if x.right != self.nil:
+            x.right.parent = y
+        x.parent = y.parent
+        if y.parent == self.nil:
+            self.root = x
+        elif y == y.parent.left:
+            y.parent.left = x
+        else:
+            y.parent.right = x
+        x.right = y
+        y.parent = x
 
 
 # chapter 12.1
@@ -122,28 +224,9 @@ def tree_search_recursive(x, k):
     if x is None or k == x.data:
         return x
     if k < x.data:
-        return tree_search(x.left, k)
+        return tree_search_recursive(x.left, k)
     else:
-        return tree_search(x.right, k)
-
-
-# chapter 12.2
-def tree_search(x, k):
-    while x is not None and k != x.data:
-        if k < x.data:
-            x = x.left
-        else:
-            x = x.right
-    return x
-
-
-# chapter 12.2
-def tree_minimum(x):
-    if x is None:
-        return x
-    while x.left is not None:
-        x = x.left
-    return x
+        return tree_search_recursive(x.right, k)
 
 
 # exercises 12.2-2
@@ -154,43 +237,12 @@ def tree_minimum_recursive(x):
         return tree_minimum_recursive(x.left)
 
 
-# chapter 12.2
-def tree_maximum(x):
-    if x is None:
-        return x
-    while x.right is not None:
-        x = x.right
-    return x
-
-
 # exercises 12.2-2
 def tree_maximum_recursive(x):
     if x is None or x.right is None:
         return x
     else:
         return tree_maximum_recursive(x.right)
-
-
-# chapter 12.2
-def tree_successor(x):
-    if x.right is not None:
-        return tree_minimum(x.right)
-    y = x.parent
-    while y is not None and x == y.right:
-        x = y
-        y = y.parent
-    return y
-
-
-# exercises 12.2-3
-def tree_predecessor(x):
-    if x.left is not None:
-        return tree_maximum(x.left)
-    y = x.parent
-    while y is not None and x == y.left:
-        x = y
-        y = y.parent
-    return y
 
 
 if __name__ == "__main__":
@@ -208,8 +260,8 @@ if __name__ == "__main__":
     print()
     inorder_tree_nonrecursive(tree.root)
     print(tree_search_recursive(tree.root, 3).data, tree_search_recursive(tree.root, 10))
-    print(tree_search(tree.root, 3).data, tree_search(tree.root, 10))
-    print(tree_minimum(tree.root).data, tree_maximum(tree.root).data)
+    print(tree.search(3).data, tree.search(10))
+    print(tree.minimum().data, tree.maximum().data)
     print(tree_minimum_recursive(tree.root).data, tree_maximum_recursive(tree.root).data)
-    print(tree_successor(nodes[4]).data, tree_successor(nodes[7]))
-    print(tree_predecessor(nodes[4]).data, tree_predecessor(nodes[1]))
+    print(tree.successor(nodes[4]).data, tree.successor(nodes[7]))
+    print(tree.predecessor(nodes[4]).data, tree.predecessor(nodes[1]))

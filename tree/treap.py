@@ -1,56 +1,22 @@
 #!/usr/bin/python
 # problem 13-4
 from random import random
+import binary_search_tree
 
 
-class Node():
+class Node(binary_search_tree.Node):
     def __init__(self, data):
-        self.data = data
+        super().__init__(data)
         self.priority = random()
-        self.left = None
-        self.right = None
 
 
-class Treap():
-    # NOTE: Treap can be inherited from Binary Search Tree
+class Treap(binary_search_tree.BinarySearchTree):
     def __init__(self):
-        self.root = None
-
-
-    def _left_rotate(self, x):
-        y = x.right
-        x.right = y.left
-        if y.left is not None:
-            y.left.parent = x
-        y.parent = x.parent
-        if x.parent is None:
-            self.root = y
-        elif x.parent.left == x:
-            x.parent.left = y
-        else:
-            x.parent.right = y
-        y.left = x
-        x.parent = y
-
-
-    def _right_rotate(self, y):
-        x = y.left
-        y.left = x.right
-        if x.right is not None:
-            x.right.parent = y
-        x.parent = y.parent
-        if y.parent is None:
-            self.root = x
-        elif y.parent.left == y:
-            y.parent.left = x
-        else:
-            y.parent.right = x
-        x.right = y
-        y.parent = x
+        super().__init__()
 
 
     def _balance(self, x):
-        while x is not None:
+        while x is not self.nil:
             if x.left and x.priority > x.left.priority:
                 self._right_rotate(x)
             elif x.right and x.priority > x.right.priority:
@@ -59,34 +25,9 @@ class Treap():
 
 
     def insert(self, z):
-        y = None
-        x = self.root
-        while x is not None:
-            y = x
-            if z.data < x.data:
-                x = x.left
-            else:
-                x = x.right
-        z.parent = y
-        if y is None:
-            self.root = z
-        elif z.data < y.data:
-            y.left = z
-        else:
-            y.right = z
+        super().insert(z)
 
         self._balance(z.parent)
-
-
-    def _transplant(self, u, v):
-        if u.parent is None:
-            self.root = v
-        elif u.parent.left == u:
-            u.parent.left = v
-        else:
-            u.parent.right = v
-        if v is not None:
-            v.parent = u.parent
 
 
     def delete(self, z):

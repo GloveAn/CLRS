@@ -1,66 +1,41 @@
 #!/usr/bin/python
 # problem 13-3
+import binary_search_tree
 
 
-class Node():
+class Node(binary_search_tree.Node):
     def __init__(self, data):
-        self.data = data
+        super().__init__(data)
         self.hight = 0  # length of highest path from it down to a leaf
-        self.parent = None
-        self.left = None
-        self.right = None
 
 
-class AVLTree():
-    # NOTE: AVL Tree can be inherited from Binary Search Tree
+class AVLTree(binary_search_tree.BinarySearchTree):
     def __init__(self):
-        self.root = None
+        super().__init__()
 
 
     def _left_rotate(self, x):
-        y = x.right
-        x.right = y.left
-        if y.left != None:
-            y.left.parent = x
-        y.parent = x.parent
-        if x.parent == None:
-            self.root = y
-        elif x.parent.left == x:
-            x.parent.left = y
-        else:
-            x.parent.right = y
-        y.left = x
-        x.parent = y
+        super()._left_rotate(x)
 
         self._update_height(x)
-        self._update_height(y)
+        self._update_height(x.parent)
 
 
     def _right_rotate(self, y):
-        x = y.left
-        y.left = x.right
-        if x.right != None:
-            x.right.parent = y
-        x.parent = y.parent
-        if y.parent == None:
-            self.root = x
-        elif y.parent.left == y:
-            y.parent.left = x
-        else:
-            y.parent.right = x
-        x.right = y
-        y.parent = x
+        super()._right_rotate(y)
 
         self._update_height(y)
-        self._update_height(x)
+        self._update_height(y.parent)
 
 
-    def _height(self, x):
+    @staticmethod
+    def _height(x):
         return x.height if x else -1
 
 
-    def _update_height(self, x):
-        x.height = max(self._height(x.left), self._height(x.right)) + 1
+    @staticmethod
+    def _update_height(x):
+        x.height = max(AVLTree._height(x.left), AVLTree._height(x.right)) + 1
 
 
     def _balance(self, x):
@@ -83,40 +58,9 @@ class AVLTree():
 
 
     def insert(self, z):
-        y = None
-        x = self.root
-        while x is not None:
-            y = x
-            if x.data < z.data:
-                x = x.right
-            else:
-                x = x.left
-        z.parent = y
-        if y is None:
-            self.root = z
-        elif y.data < z.data:
-            y.right = z
-        else:
-            y.left = z
+        super().insert(z)
 
         self._balance(z)
-
-
-    def _transplant(self, u, v):
-        if u.parent is None:
-            self.root = v
-        elif u.parent.left == u:
-            u.parent.left = v
-        else:
-            u.parent.right = v
-        if v is not None:
-            v.parent = u.parent
-
-
-    def _minimum(self, x):
-        while x.left is not None:
-            x = x.left
-        return x
 
 
     def delete(self, z):
@@ -126,7 +70,7 @@ class AVLTree():
         elif z.right is None:
             self._transplant(z, z.left)
         else:
-            y = self._minimum(z.right)
+            y = self.minimum(z.right)
 
             x = y
 

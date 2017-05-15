@@ -1,81 +1,33 @@
 #!/usr/bin/python
+import binary_search_tree
 
 
 RED = 1
 BLACK = 0
 
 
-class Node():
-    def __init__(self, data, color=RED, parent=None):
-        self.data = data
-        self.color = color
-        self.parent = parent
-        self.left = None
-        self.right = None
+class Node(binary_search_tree.Node):
+    def __init__(self, data):
+        super().__init__(data)
+        self.color = RED
 
 
-class RedBlackTree():
+class RedBlackTree(binary_search_tree.BinarySearchTree):
     # chapter 13.1
     def __init__(self):
-        self.nil = Node(None, BLACK)
+        self.nil = Node(None)
+        self.nil.color = BLACK
+
         self.root = self.nil
         self.root.parent = self.nil
 
 
-    # chapter 13.2
-    def _left_rotate(self, x):
-        y = x.right
-        x.right = y.left
-        if y.left != self.nil:
-            y.left.parent = x
-        y.parent = x.parent
-        if x.parent == self.nil:
-            self.root = y
-        elif x == x.parent.left:
-            x.parent.left = y
-        else:
-            x.parent.right = y
-        y.left = x
-        x.parent = y
-
-
-    # exercises 13.2-1
-    def _right_rotate(self, y):
-        x = y.left
-        y.left = x.right
-        if x.right != self.nil:
-            x.right.parent = y
-        x.parent = y.parent
-        if y.parent == self.nil:
-            self.root = x
-        elif y == y.parent.left:
-            y.parent.left = x
-        else:
-            y.parent.right = x
-        x.right = y
-        y.parent = x
-
-
     # chapter 13.3
     def insert(self, z):
-        y = self.nil
-        x = self.root
-        while x != self.nil:
-            y = x
-            if z.data < x.data:
-                x = x.left
-            else:
-                x = x.right
-        z.parent = y
-        if y == self.nil:
-            self.root = z
-        elif z.data < y.data:
-            y.left = z
-        else:
-            y.right = z
+        super().insert(z)
+
         z.left = self.nil
         z.right = self.nil
-        z.color = RED
         self._insert_fixup(z)
 
 
@@ -128,14 +80,6 @@ class RedBlackTree():
         v.parent = u.parent
 
 
-    def _minimum(self, x):
-        if x is self.nil:
-            return x
-        while x.left is not self.nil:
-            x = x.left
-        return x
-
-
     # chapter 13.4
     def delete(self, z):
         y = z
@@ -147,7 +91,7 @@ class RedBlackTree():
             x = z.left
             self._transplant(z, z.left)
         else:
-            y = self._minimum(z.right)
+            y = self.minimum(z.right)
             y_original_color = y.color
             x = y.right
             if y.parent == z:
