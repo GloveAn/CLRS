@@ -64,6 +64,7 @@ class MinHeap(Heap):
     def __init__(self, A):
         Heap.__init__(self, A)
         self.decrease_key = self.change_key
+        self.extract_min = self.extract_top
 
 
     # exercises 6.2-2
@@ -130,6 +131,7 @@ class MaxHeap(Heap):
     def __init__(self, A):
         Heap.__init__(self, A)
         self.increase_key = self.change_key
+        self.extract_max = self.extract_top
 
 
     def _heapify(self, i):
