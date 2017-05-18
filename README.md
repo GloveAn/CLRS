@@ -2,7 +2,7 @@
 
 This repository serves as my algorithm study timeline. I'm learning algorithms via open course ware with CLRS 3rd edition.
 
-CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III( 11-, 12-, 13, 14- ); IV( 15, 16- ).
+CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III( 11-, 12-, 13, 14- ); IV( 15, 16-, 17 ).
 
 ## Materials
 
