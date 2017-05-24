@@ -2,7 +2,7 @@
 
 This repository serves as my algorithm study timeline. I'm learning algorithms via open course ware with CLRS 3rd edition.
 
-CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III( 11-, 12-, 13, 14- ); IV( 15, 16-, 17 ).
+CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III( 11-, 12-, 13, 14- ); IV( 15, 16-, 17 ); VI( 22- ).
 
 ## Materials
 
@@ -12,5 +12,6 @@ CLRS finished chapters: I ( 1, 2, 3, 4-, 5- ); II ( 6, 7, 8, 9 ); III( 11-, 12-,
 ## Solutions
 
 1. By [Zhao HG](https://www.gitbook.com/book/cyberzhg/clrs/details)
-2. By [Stefan Kanev](http://clrs.skanev.com/)
-3. By [CLRS](http://www.math.rutgers.edu/~ajl213/CLRS/CLRS.html)
+2. By [gzc](https://github.com/gzc/CLRS)
+3. By [Stefan Kanev](http://clrs.skanev.com/)
+4. By [CLRS](http://www.math.rutgers.edu/~ajl213/CLRS/CLRS.html)

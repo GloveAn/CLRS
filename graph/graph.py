@@ -1,5 +1,6 @@
 #!/usr/bin/python
 from collections import deque
+from operator import attrgetter
 
 
 class Vertex():
@@ -175,6 +176,13 @@ def dfs_stack(G):
             dfs_visit_stack(G, u)
 
 
+# chapter 22.4
+def topologocal_sort(G):
+    dfs(G)
+    vertices = G.vertices()
+    vertices.sort(key=attrgetter('f'), reverse=True)
+    return vertices
+
 
 if __name__ == "__main__":
     V = {}
@@ -232,3 +240,6 @@ if __name__ == "__main__":
 
     G = AdjListGraph(V, E)
     dfs_stack(G)
+
+    vertices = topologocal_sort(G)
+    print(vertices)
