@@ -20,7 +20,15 @@ class Graph():
         return r
 
 
+    def edges(self):
+        raise NotImplementedError
+
+
     def neighbors(self, u):
+        raise NotImplementedError
+
+
+    def weight(self, u, v):
         raise NotImplementedError
 
 
@@ -36,6 +44,15 @@ class MatrixGraph(Graph):
             self._matrix[i][j] = w
 
 
+    def edges(self):
+        e = []
+        for i in range(len(self._matrix)):
+            for j in range(len(self._matrix)):
+                if self._matrix[i][j]:
+                    e.append((i, j, self._matrix[i][j]))
+        return e
+
+
     def neighbors(self, u):
         u = u.id
         r = []
@@ -45,6 +62,10 @@ class MatrixGraph(Graph):
                 r.append(self._vertices[i])
 
         return r
+
+
+    def weight(self, u, v):
+        return self._matrix[u.id][v.id]
 
 
 # chapter 22.1
@@ -60,6 +81,14 @@ class AdjListGraph(Graph):
             self._adj_list[i].append((j, w))
 
 
+    def edges(self):
+        e = []
+        for i in range(len(self._adj_list)):
+            for j, w in self._adj_list[i]:
+                e.append((i, j, w))
+        return e
+
+
     def neighbors(self, u):
         u = u.id
         r = []
@@ -68,6 +97,12 @@ class AdjListGraph(Graph):
             r.append(self._vertices[i])
 
         return r
+
+
+    def weight(self, u, v):
+        for j, w in self._adj_list[u.id]:
+            if j == v.id:
+                return w
 
 
 # chapter 22.2, exerceises 22.2-3
@@ -182,6 +217,35 @@ def topologocal_sort(G):
     vertices = G.vertices()
     vertices.sort(key=attrgetter('f'), reverse=True)
     return vertices
+
+
+# chapter 24
+def initialize_single_source(G, s):
+    INFINITE = 0x7FFFFFFF
+
+    for v in G.vertices():
+        v.d = INFINITE
+        v.pi = None
+    s.d = 0
+
+
+# chapter 24
+def relax(u, v, w):
+    if v.d > u.d + w:
+        v.d = u.d + w
+        v.pi = u
+
+
+# chapter 24.1
+def bellman_ford(G, s):
+    initialize_single_source(G, s)
+    for i in range(len(G.vertices()) - 1):
+        for u, v, w in G.edges():
+            relax(u, v, w)
+    for u, v, w in G.edges():
+        if v.d > u.d + w:
+            return False
+    return True
 
 
 if __name__ == "__main__":
