@@ -1,6 +1,9 @@
 #!/usr/bin/python
 from collections import deque
 from operator import attrgetter
+import sys
+sys.path.append("../data_structures")
+import heap
 
 
 class Vertex():
@@ -246,6 +249,27 @@ def bellman_ford(G, s):
         if v.d > u.d + w:
             return False
     return True
+
+
+# chapter 24.2
+def dag_shortest_paths(G, s):
+    vertices = topologocal_sort(G)
+    initialize_single_source(G, s)
+    for u in vertices:
+        for v in G.neighbors(u):
+            relax(u, v, G.weight(u, v))
+
+
+# chaper 24.3
+def dijkstra(G, s):
+    initialize_single_source(G, s)
+    S = set()
+    Q = heap.MinHeap(G.vertices())
+    while len(Q):
+        u = Q.extract_min()
+        S.add(u)
+        for v in G.neighbors(u):
+            relax(u, v, G.weight(u, v))  # decrease_key!!
 
 
 if __name__ == "__main__":

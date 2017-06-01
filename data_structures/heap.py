@@ -8,6 +8,10 @@ class Heap():
         self._build()
 
 
+    def __len__(self):
+        return self._heap_size
+
+
     def _heapify(self, i):
         raise NotImplementedError
 
