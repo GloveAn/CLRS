@@ -272,6 +272,55 @@ def dijkstra(G, s):
             relax(u, v, G.weight(u, v))  # decrease_key!!
 
 
+# chapter 25
+def print_all_pairs_shortest_path(PI, i, j):
+    if i == j:
+        print(i.id)
+    elif PI[i][j] == None:
+        print("no path from 'i' to 'j' exists")
+    else:
+        print_all_pairs_shortest_path(PI, i, PI[i][j])
+        print(j.id)
+
+
+# chapter 25.1
+def extend_shortest_paths(G):
+    INFINITE = 0x7FFFFFFF
+
+    vertices = G.vertices()
+    n = len(vertices)
+    L_prime = [[INFINITE for _ in range(n)] for _ in range(n)]
+
+    for i in range(n):
+        for j in range(n):
+            for k in range(n):
+                L_prime = min(L_prime, \
+                    L[i][k] + G.weight(vertices[k], vertices[j]))
+
+    return L_prime
+
+
+def show_all_pairs_shortest_paths(G):
+    pass
+
+
+def floyd_warshall(G):
+    vertices = G.vertices()
+
+    n = len(vertices)
+    D1 = [[G.weight(vertices[i], vertices[j]) for j in range(n)] for i in range(n)]
+    D2 = [[G.weight(vertices[i], vertices[j]) for j in range(n)] for i in range(n)]
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                D2[i][j] = min(D1[i][j], D1[i][k] + D1[k][j])
+
+        D1, D2 = D2, D1
+
+    return D1
+
+
 if __name__ == "__main__":
     V = {}
     for i in range(8):
