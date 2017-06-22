@@ -3,6 +3,11 @@ from random import randint
 from math import floor
 from functools import partial
 
+import sys
+sys.path.append("../data_structures/")
+
+from heap import Heap
+
 
 def default_key(key): return key
 
@@ -152,6 +157,17 @@ def merge_sort(A, key=default_key):
 
 
     merge_recursively(A, 0, len(A))
+
+
+# chapter 6.4
+def heap_sort(A, key=default_key):
+    """ Θ(nlgn) """
+    heap = Heap(A, key=key)
+    for i in reversed(range(1, heap._heap_size)):
+        heap._heap[0], heap._heap[i] = heap._heap[i], heap._heap[0]
+        heap._heap_size -= 1
+        heap._heapify(0)
+    return heap._heap
 
 
 # exercises 7.1-2
@@ -337,6 +353,10 @@ if __name__ == '__main__':
 
     A = [5, 2, 4, 6, 1, 3]
     merge_sort(A)
+    print(A)
+
+    A = [5, 2, 4, 6, 1, 3]
+    heap_sort(A)
     print(A)
 
 
